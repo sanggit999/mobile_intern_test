@@ -75,13 +75,7 @@ class _HomePageState extends State<HomePage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          // subtitle: Text(
-                          //   "Lat: ${location.lat}, Lon: ${location.lon}",
-                          //   style: TextStyle(
-                          //     fontSize: 16.0,
-                          //     fontWeight: FontWeight.w400,
-                          //   ),
-                          // ),
+                          leading: Icon(Icons.add_location),
                           trailing: Icon(Icons.directions),
                           onTap: () {
                             openInGoogleMaps(location.lat, location.lon);

@@ -13,7 +13,7 @@ class ApiClient {
         'key': 'pk.b8e4549181d0456520ca2ee28012be9e',
         'q': query,
         'format': 'json',
-        'limit': '1',
+        'limit': '10',
       },
     );
 
