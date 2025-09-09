@@ -37,7 +37,7 @@ lib/
 │
 ├── di.dart                   # Dependency Injection
 ├── main.dart                 # App entry point
-└── .env                      # Config (Google Maps API Key, etc.)
+
 ```
 
 ## Quick Start
