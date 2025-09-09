@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_intern_test/presentation/cubit/search_places_cubit.dart';
@@ -13,7 +15,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final TextEditingController controller = TextEditingController();
-
+  Timer? debounce;
   Future<void> openInGoogleMaps(double lat, double lon) async {
     final Uri url = Uri.parse(
       "https://www.google.com/maps/search/?api=1&query=$lat,$lon",
@@ -27,6 +29,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     controller.dispose();
+    debounce?.cancel();
     super.dispose();
   }
 
@@ -52,7 +55,10 @@ class _HomePageState extends State<HomePage> {
                 border: OutlineInputBorder(),
               ),
               onChanged: (value) {
-                context.read<SearchPlacesCubit>().search(value);
+                if (debounce?.isActive ?? false) debounce!.cancel();
+                debounce = Timer(const Duration(milliseconds: 500), () {
+                  context.read<SearchPlacesCubit>().search(value);
+                });
               },
             ),
             const SizedBox(height: 16),
