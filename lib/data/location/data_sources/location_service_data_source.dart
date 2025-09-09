@@ -6,26 +6,22 @@ import 'package:mobile_intern_test/data/location/models/location_model.dart';
 import 'package:mobile_intern_test/di.dart';
 import 'package:mobile_intern_test/domain/location/entities/location_entity.dart';
 
-abstract class LocationServiceRepository {
+abstract class LocationServiceDataSource {
   Future<Either<Failure, List<LocationEntity>>> searchPlaces(String query);
 }
 
-class LocationServiceRepositoryImpl implements LocationServiceRepository {
+class LocationServiceDataSourceImpl implements LocationServiceDataSource {
   @override
   Future<Either<Failure, List<LocationEntity>>> searchPlaces(
     String query,
   ) async {
     try {
-      var response = await getIt<ApiClient>().searchPlacesRaw(query);
+      final response = await getIt<ApiClient>().searchPlacesRaw(query);
 
-      final locations = response.map<LocationEntity>((item) {
-        LocationModel locationModel = LocationModel(
-          displayName: item['display_name'] ?? '',
-          lat: double.tryParse(item['lat'] ?? '') ?? 0.0,
-          lon: double.tryParse(item['lon'] ?? '') ?? 0.0,
-        );
-        return LocationMapper.toEntity(locationModel);
-      }).toList();
+      final locations = response
+          .map((item) => LocationModel.fromJson(item))
+          .map((model) => LocationMapper.toEntity(model))
+          .toList();
 
       return Right(locations);
     } catch (e) {

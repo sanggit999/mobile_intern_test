@@ -9,7 +9,7 @@ class LocationModel {
     required this.lon,
   });
 
-  factory LocationModel.fromMap(Map<String, dynamic> json) {
+  factory LocationModel.fromJson(Map<String, dynamic> json) {
     return LocationModel(
       displayName: json['display_name'],
       lat: double.parse(json['lat']),
