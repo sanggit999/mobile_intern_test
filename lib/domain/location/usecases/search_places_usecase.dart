@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:mobile_intern_test/core/error/failure.dart';
+import 'package:mobile_intern_test/core/error/failures.dart';
 import 'package:mobile_intern_test/core/usecase/usecase.dart';
 import 'package:mobile_intern_test/di.dart';
 import 'package:mobile_intern_test/domain/location/entities/location_entity.dart';

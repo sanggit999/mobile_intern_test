@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:mobile_intern_test/core/error/failure.dart';
+import 'package:mobile_intern_test/core/error/exceptions.dart';
+import 'package:mobile_intern_test/core/error/failures.dart';
+import 'package:mobile_intern_test/core/helper/mapper/location_mapper.dart';
 import 'package:mobile_intern_test/data/location/data_sources/location_service_data_source.dart';
 import 'package:mobile_intern_test/di.dart';
 import 'package:mobile_intern_test/domain/location/entities/location_entity.dart';
@@ -10,14 +12,20 @@ class LocationRepositoryImpl implements LocationRepository {
   Future<Either<Failure, List<LocationEntity>>> searchPlaces(
     String query,
   ) async {
-    final result = await getIt<LocationServiceDataSource>().searchPlaces(query);
-    return result.fold(
-      (error) {
-        return Left(ServerFailure(message: error.message));
-      },
-      (data) {
-        return Right(data);
-      },
-    );
+    try {
+      final result = await getIt<LocationServiceDataSource>().searchPlaces(
+        query,
+      );
+
+      final data = result
+          .map((model) => LocationMapper.toEntity(model))
+          .toList();
+
+      return Right(data);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message!));
+    } catch (e) {
+      return Left(ServerFailure(message: "Unexpected error"));
+    }
   }
 }
